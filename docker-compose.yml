@@ -1,0 +1,38 @@
+version: '3.3'  # 3.3 necessaire au jenkins docker
+services:
+
+  # Base de donnees
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    container_name: mysql
+    networks:
+      - my_network
+    ports:
+      - '3306:3306'
+
+  # Service API Rest (avec Spring Boot)
+  tpapi:
+    image: mathaus26/tpapi:latest
+    container_name: tpapi
+    networks:
+      - my_network
+    ports:
+      - '9000:9000'
+
+  # Service Application Web (avec Spring Boot)
+  tpweb:
+    build:
+      context: .
+    container_name: tpweb
+    ports:
+      - '9001:9001'
+    networks:
+      - my_network
+    depends_on:
+      - tpapi
+
+networks:
+  my_network:
+    driver: bridge

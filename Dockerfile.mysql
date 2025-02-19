@@ -1,0 +1,14 @@
+# Utiliser l'image officielle de MySQL comme base
+FROM mysql:latest
+
+# Définir le mot de passe root pour MySQL
+ENV MYSQL_ROOT_PASSWORD=root
+
+# Copier le script depuis la racine du depot
+COPY script.sql /docker-entrypoint-initdb.d/
+
+# Exposer le port 3306
+EXPOSE 3306
+
+# Lancer MySQL
+CMD ["mysqld"]
